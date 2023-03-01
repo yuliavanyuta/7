@@ -1,0 +1,58 @@
+import numpy as np
+import random
+import time as tme
+import csv
+import matplotlib.pyplot as plt
+from mpl_toolkits.mplot3d import Axes3D
+
+# начнём с первой части задания: создадим два массива с рандомными элементами с помощью numpy
+# далее их перемножим и выведем только время, за которое компьютер с этим справится
+
+first = np.random.randint(1, 100, 10**6)
+second = np.random.randint(1, 100, 10**6)
+third = np.multiply(first, second)
+
+time_required = tme.perf_counter()
+print(time_required)
+
+# теперь приступим ко второму: создадим 2 графика, учитывая значения из таблицы Excel (data1.csv)
+# для этого нужно создать пустые массивы для координат (x, y) и (x, z)
+
+x = []
+y = []
+z = []
+
+# теперь нужно открыть csv-файл и записать значения в переменные из соответствующих им столбцов 
+# x = 1 столбец, y = 4 столбец, z = 5 столбец
+
+with open('table 1.csv', 'r') as small_table:
+    plots = csv.reader(small_table, delimiter=';')
+    for row in plots:
+        x.append(row[0])
+        y.append(row[3])
+        z.append(row[4])
+
+# теперь посмотрим, что получилось
+
+plt.plot(x, y)
+plt.plot(x, z)
+
+plt.show()
+
+# теперь с помощью Axes_3d построим трёхмерный график с заданными вариантом условиями
+# x∈(-п;п); y=x; z=tg(x)
+
+fig = plt.figure(figsize = (10, 10))
+ax_3d = fig.add_subplot(projection = '3d')
+
+x = y = np.arange(-np.pi, np.pi, 0.2)
+xgrid, ygrid = np.meshgrid(x, y)
+zgrid = np.sin(xgrid) / np.cos(xgrid)
+
+ax_3d.plot_wireframe(xgrid, ygrid, zgrid)
+
+ax_3d.set_xlabel('x')
+ax_3d.set_ylabel('y')
+ax_3d.set_zlabel('z')
+
+plt.show()
